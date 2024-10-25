@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-route
 import Join from './component/Join';
 import Login from './component/Login';
 import Main from './component/Main';
+import Add from './component/Add';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/join" element={<Join />} />
           <Route path="/main" element={<Main />} />
+          <Route path="/add" element={<Add />} />
         </Routes>
     </Router>
   );
