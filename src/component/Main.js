@@ -13,10 +13,10 @@ function Main() {
 
     useEffect(() => {
         const name = localStorage.getItem('userName');
-        const id = localStorage.getItem('userId'); // 'Id'를 'id'로 수정하여 일관성 유지
+        const id = localStorage.getItem('userId'); 
         if (name && id) {
             setUserName(name);
-            setUserId(id); // userId를 설정
+            setUserId(id); 
             fetchTransactions(id); // userId를 사용하여 거래 내역을 가져옴
         } else {
             navigate('/login'); // 로그인되지 않았을 때 로그인 페이지로 리디렉션
@@ -53,8 +53,8 @@ function Main() {
     };
 
     const formatDate =(dateString) =>{
-        const date =new Date(dateString).toLocaleString();
-        return `${date}`;
+        const date =new Date(dateString);
+        return date.toLocaleDateString('ko-KR');
     };
 
     return (
@@ -67,7 +67,7 @@ function Main() {
                     {userName ? (
                         <>
                             <Typography variant="body1" sx={{ marginRight: 2 }}>
-                                {userName}님 환영합니다!
+                                {userId}님 환영합니다!
                             </Typography>
                             <Button color="inherit" onClick={Logout}>로그아웃</Button>
                         </>
@@ -77,10 +77,10 @@ function Main() {
                 </Toolbar>
             </AppBar>
 
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6">
                 총 수입: {totalIncome} 원
             </Typography>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" >
                 총 지출: {totalExpense} 원
             </Typography>
             <Button variant="contained" color="primary" onClick={() => navigate('/add')}>

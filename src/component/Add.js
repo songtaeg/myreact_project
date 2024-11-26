@@ -7,6 +7,7 @@ function Add() {
     const [amount, setAmount] = useState('');
     const [type, setType] = useState('income');
     const [category, setCategory] = useState('');
+    const [date,setDate]=useState('');
 
     const navigate = useNavigate();
     
@@ -90,6 +91,15 @@ function Add() {
                         type="text"
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>날짜:</label>
+                    <input
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
                         required
                     />
                 </div>
