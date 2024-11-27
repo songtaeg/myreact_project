@@ -1,13 +1,14 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box, TextField, Button, FormControl, InputLabel, Select, MenuItem, Typography } from '@mui/material';
 
 function Add() {
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState('');
     const [type, setType] = useState('income');
     const [category, setCategory] = useState('');
-    const [date,setDate]=useState('');
+    const [date, setDate] = useState('');
 
     const navigate = useNavigate();
     
@@ -57,55 +58,74 @@ function Add() {
     };
 
     return (
-        <div>
-            <h2>거래 추가</h2>
+        <Box sx={{ maxWidth: 400, margin: '0 auto', padding: 3 }}>
+            <Typography variant="h5" sx={{ textAlign: 'center', marginBottom: 2 }}>
+                거래 추가
+            </Typography>
             <form onSubmit={Submit}>
-                <div>
-                    <label>설명:</label>
-                    <input
-                        type="text"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>금액:</label>
-                    <input
-                        type="number"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>유형:</label>
-                    <select value={type} onChange={(e) => setType(e.target.value)}>
-                        <option value="income">수입</option>
-                        <option value="expense">지출</option>
-                    </select>
-                </div>
-                <div>
-                    <label>카테고리:</label>
-                    <input
-                        type="text"
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>날짜:</label>
-                    <input
-                        type="date"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit">추가</button>
+                <TextField
+                    label="설명"
+                    variant="outlined"
+                    fullWidth
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    sx={{ marginBottom: 2 }}
+                    required
+                />
+                <TextField
+                    label="금액"
+                    variant="outlined"
+                    fullWidth
+                    type="number"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    sx={{ marginBottom: 2 }}
+                    required
+                />
+                <FormControl fullWidth sx={{ marginBottom: 2 }}>
+                    <InputLabel>유형</InputLabel>
+                    <Select
+                        value={type}
+                        onChange={(e) => setType(e.target.value)}
+                        label="유형"
+                    >
+                        <MenuItem value="income">수입</MenuItem>
+                        <MenuItem value="expense">지출</MenuItem>
+                    </Select>
+                </FormControl>
+                <TextField
+                    label="카테고리"
+                    variant="outlined"
+                    fullWidth
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    sx={{ marginBottom: 2 }}
+                    required
+                />
+                <TextField
+                    label="날짜"
+                    variant="outlined"
+                    fullWidth
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    sx={{ marginBottom: 2 }}
+                    required
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                />
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    sx={{ padding: '10px', fontSize: '16px' }}
+                >
+                    추가
+                </Button>
             </form>
-        </div>
+        </Box>
     );
 }
 
