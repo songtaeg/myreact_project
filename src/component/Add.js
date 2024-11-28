@@ -21,7 +21,7 @@ function Add() {
             navigate('/login');
         }
     }, [userId, navigate]);
-   
+
     const Submit = async (e) => {
         e.preventDefault();
 
@@ -31,12 +31,20 @@ function Add() {
             return;
         }
 
+        // 날짜가 비어있는지 확인
+        if (!date) {
+            alert('날짜를 선택해야 합니다.');
+            return;
+        }
+
+        // 사용자가 입력한 날짜를 Date 객체로 변환하여 서버에 전달
         const transaction = {
             user_id: userId,
             description,
             amount: parseFloat(amount), // 소수점 지원
             type,
             category,
+            date: date, // 과거 날짜를 그대로 전달
         };
 
         try {
@@ -47,6 +55,7 @@ function Add() {
                 setDescription('');
                 setAmount('');
                 setCategory('');
+                setDate('');
                 navigate('/main');
             } else {
                 alert(res.data.message);

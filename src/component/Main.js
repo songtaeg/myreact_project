@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button, AppBar, Toolbar, List, ListItem, ListItemText } from '@mui/material';
+import { Box, Typography, Button, AppBar, Toolbar, List, ListItem, ListItemText, Paper } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 function Main() {
     const [userId, setUserId] = useState('');
@@ -10,7 +10,7 @@ function Main() {
     const [transactions, setTransactions] = useState([]);
     const [totalIncome, setTotalIncome] = useState(0);
     const [totalExpense, setTotalExpense] = useState(0);
-    const [chartData, setChartData] = useState([]);  // chartData 상태 추가
+    const [chartData, setChartData] = useState([]);  
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -19,9 +19,9 @@ function Main() {
         if (name && id) {
             setUserName(name);
             setUserId(id);
-            fetchTransactions(id); // userId를 사용하여 거래 내역을 가져옴
+            fetchTransactions(id); 
         } else {
-            navigate('/login'); // 로그인되지 않았을 때 로그인 페이지로 리디렉션
+            navigate('/login'); 
         }
     }, [navigate]);
 
@@ -37,8 +37,8 @@ function Main() {
 
     const calculateTotals = (transactions) => {
         const income = transactions
-            .filter(t => t.type === '수입') // "수입" 거래만 필터링
-            .reduce((acc, curr) => acc + curr.amount, 0); //필터링 거래 합산
+            .filter(t => t.type === '수입') 
+            .reduce((acc, curr) => acc + curr.amount, 0); 
         const expense = transactions
             .filter(t => t.type === '지출')
             .reduce((acc, curr) => acc + curr.amount, 0);
@@ -59,11 +59,10 @@ function Main() {
         return date.toLocaleDateString('ko-KR');
     };
 
-    // 지출 카테고리별 금액을 계산한 데이터
+    //지출 필터링
     const expenseData = transactions
-        .filter(transaction => transaction.type === '지출') // 지출만 필터링
+        .filter(transaction => transaction.type === '지출')
         .reduce((acc, transaction) => {
-            // 각 카테고리별로 금액을 합산
             if (acc[transaction.category]) {
                 acc[transaction.category] += transaction.amount;
             } else {
@@ -72,13 +71,11 @@ function Main() {
             return acc;
         }, {});
 
-    // 차트 데이터로 변환 (동적으로 데이터 계산) - 여기서 계산된 데이터는 차트에 필요한 형식으로 변환됨
     const updatedChartData = Object.keys(expenseData).map(category => ({
         category,
         amount: expenseData[category]
     }));
 
-    // useEffect 추가: transactions 상태가 변경될 때마다 expenseData와 chartData를 다시 계산하도록 설정
     useEffect(() => {
         if (transactions.length > 0) {
             const expenseData = transactions
@@ -97,21 +94,20 @@ function Main() {
                 amount: expenseData[category]
             }));
 
-            // 상태 업데이트: 새롭게 계산된 차트 데이터를 setChartData로 업데이트
             setChartData(updatedChartData);
         }
-    }, [transactions]);  // transactions 상태가 변경될 때마다 실행됨
+    }, [transactions]);
 
     return (
-        <Box sx={{ padding: 3 }}>
-            <AppBar position="static">
+        <Box sx={{ padding: 3, backgroundColor: '#f4f4f4', minHeight: '100vh' }}>
+            <AppBar position="static" sx={{ backgroundColor: '#1976d2' }}>
                 <Toolbar>
-                    <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                    <Typography variant="h6" sx={{ flexGrow: 1, color: '#fff' }}>
                         가계부
                     </Typography>
                     {userName ? (
                         <>
-                            <Typography variant="body1" sx={{ marginRight: 2 }}>
+                            <Typography variant="body1" sx={{ color: '#fff', marginRight: 2 }}>
                                 {userId}님 환영합니다!
                             </Typography>
                             <Button color="inherit" onClick={Logout}>로그아웃</Button>
@@ -122,48 +118,56 @@ function Main() {
                 </Toolbar>
             </AppBar>
 
-            <Typography variant="h6">
-                총 수입: {totalIncome} 원
-            </Typography>
-            <Typography variant="h6" >
-                총 지출: {totalExpense} 원
-            </Typography>
-            <Button variant="contained" color="primary" onClick={() => navigate('/add')}>
-                거래 추가하기
-            </Button>
-            <Typography variant="h5" sx={{ marginTop: 3 }}>
-                최근 거래 내역
-            </Typography>
-            <List>
-                {transactions.length > 0 ? (
-                    transactions.map((transaction) => (
-                        <ListItem key={transaction.id}>
-                            <ListItemText
-                                primary={`${transaction.description} - ${transaction.amount} 원`}
-                                secondary={`${transaction.type} | ${transaction.category} | ${formatDate(transaction.date)}`}
-                            />
-                        </ListItem>
-                    ))
-                ) : (
-                    <Typography variant="body1">거래 내역이 없습니다.</Typography>
-                )}
-            </List>
-
-            {/* 지출 카테고리별 금액을 가로 막대 그래프로 표시 */}
-            {chartData.length > 0 && (
-                <Typography variant="h5" sx={{ marginTop: 3 }}>
-                    지출 카테고리별 금액
+            <Box sx={{ padding: 3, backgroundColor: '#fff', borderRadius: 2, boxShadow: 2, marginTop: 3 }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+                    총 수입: {totalIncome} 원
                 </Typography>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+                    총 지출: {totalExpense} 원
+                </Typography>
+                <Button variant="contained" color="primary" onClick={() => navigate('/add')} sx={{ marginBottom: 3 }}>
+                    거래 추가하기
+                </Button>
+            </Box>
+
+            <Box sx={{ marginTop: 3 }}>
+                <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+                    최근 거래 내역
+                </Typography>
+                <Paper sx={{ padding: 2, borderRadius: 2, boxShadow: 2 }}>
+                    <List>
+                        {transactions.length > 0 ? (
+                            transactions.map((transaction) => (
+                                <ListItem key={transaction.id}>
+                                    <ListItemText
+                                        primary={`${transaction.description} - ${transaction.amount} 원`}
+                                        secondary={`${transaction.type} | ${transaction.category} | ${formatDate(transaction.date)}`}
+                                    />
+                                </ListItem>
+                            ))
+                        ) : (
+                            <Typography variant="body1" sx={{ color: 'gray' }}>거래 내역이 없습니다.</Typography>
+                        )}
+                    </List>
+                </Paper>
+            </Box>
+
+            {chartData.length > 0 && (
+                <Box sx={{ marginTop: 3 }}>
+                    <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+                        지출 카테고리별 금액
+                    </Typography>
+                    <ResponsiveContainer width="100%" height={300}>
+                        <BarChart data={chartData}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis type="category" dataKey="category" />
+                            <YAxis />
+                            <Tooltip />
+                            <Bar dataKey="amount" fill="#ff8042" barSize={30}/>
+                        </BarChart>
+                    </ResponsiveContainer>
+                </Box>
             )}
-            <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="category" dataKey="category" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="amount" fill="#ff8042" barSize={30}/>
-                </BarChart>
-            </ResponsiveContainer>
         </Box>
     );
 }
