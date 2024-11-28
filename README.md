@@ -2,6 +2,7 @@ react 개인 프로젝트
 ---
 🔔 소개
 + react를 이용 가계부 사이트 구현
+(서버) https://github.com/songtaeg/myreact_project_server
 ---
 🚀 사용 언어
 
